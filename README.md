@@ -1,8 +1,8 @@
-# pyRecommender - A Recommender System Python Library
+# pyRecommenderSystem - A Recommender System Python Library
 
 1. Install
 ```bash
-pip install pyRecommender
+pip install pyRecommenderSystem
 ```
 
 2. Algorithms:
