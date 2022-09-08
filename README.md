@@ -16,6 +16,8 @@ pip install pyRecommenderSystem
 	* show_all = Boolean that indicates if the similiarities of each item will be calculated (show_all = True) or for just one item (show_all = False). The default value is True.
 
 	* graph = Boolean that indicates if the cosine similarity will be displayed (graph = True) or not (graph = False). The default value is True.
+	 
+	* size = Graph size. The default value is 10.
 
 	* target = k-top similarities of target item. Only relevant if "show_all = False". The default value is "none".	
 
@@ -92,6 +94,10 @@ pip install pyRecommenderSystem
 	* user_in_columns = Boolean that indicates if the user is in the column (user_in_column = True) then a user-user similarity is made, if (user_in_column = False) then an item-item similarity is performed instead. The default value is True.
 
 	* graph = Boolean that indicates if the first 2 features of the users and items will be displayed (graph = True) or not (graph = False). The default value is True.
+	
+	* size_x = Graph X axis size. The default value is 15.
+	
+	* size_y = Graph Y axis size. The default value is 15.
 
 3. Try it in **Colab**:
 
@@ -102,4 +108,3 @@ pip install pyRecommenderSystem
 - Collaborative Filtering - Latent Factors ([ Colab Demo ](https://colab.research.google.com/drive/1xBFF0noZGHM0cDpeCukhlpSLrAWrntG7?usp=sharing))
 - Collaborative Filtering - Nearest Neighbors ([ Colab Demo ](https://colab.research.google.com/drive/1uNl34kRrj4ktZtNSLgZApSR_f0MVuoHf?usp=sharing))
 - Collaborative Filtering - SVD ([ Colab Demo ](https://colab.research.google.com/drive/1zUoL82j58Wl1tv2ycfGCMLm-vmPH4o2o?usp=sharing))
-
