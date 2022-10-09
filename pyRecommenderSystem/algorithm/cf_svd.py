@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 import numpy  as np
 import pandas as pd
+import plotly.graph_objects as go 
+import plotly.io as pio
 import random
 
 ############################################################################
@@ -28,6 +30,54 @@ def duplicates_set(arr):
         result.append(str(arr[i,:]) in uniques)
         uniques.add(str(arr[i,:]))
     return result
+
+# Function: Plot Users or Items
+def graph_interactive(data, U, V, view = 'browser', size = 10, user = True):
+    if (view == 'browser' ):
+        pio.renderers.default = 'browser'
+    if (user == True):
+        P   = U
+        n_L = data.columns.to_list()
+        col = 'rgba(0, 0, 255, 0.45)'
+    else:
+       P   = V
+       n_L = data.index.to_list()
+       col = 'rgba(255, 0, 0, 0.45)'
+    Xv = []
+    Yv = []
+    for i in range(0, P.shape[0]):
+        Xv.append(P[i, 0]*1.00)
+        Yv.append(P[i, 1]*1.00)
+    n_trace = go.Scatter(x         = Xv,
+                         y         = Yv,
+                         opacity   = 1,
+                         mode      = 'markers',
+                         marker    = dict(symbol = 'circle-dot', size = size, color = col),
+                         text      = n_L,
+                         hoverinfo = 'text',
+                         hovertext = n_L,
+                         name      = ''
+                         )
+    layout  = go.Layout(showlegend   = False,
+                        hovermode    = 'closest',
+                        margin       = dict(b = 10, l = 5, r = 5, t = 10),
+                        plot_bgcolor = '#e0e0e0',
+                        xaxis        = dict(  showgrid       = True, 
+                                              gridcolor      = 'grey',
+                                              zeroline       = False, 
+                                              showticklabels = True, 
+                                              tickmode       = 'array', 
+                                           ),
+                        yaxis        = dict(  showgrid       = True, 
+                                              gridcolor      = 'grey',
+                                              zeroline       = False, 
+                                              showticklabels = True,
+                                              tickmode       = 'array', 
+                                            )
+                        )
+    fig_aut = go.Figure(data = [n_trace], layout = layout)
+    fig_aut.show() 
+    return
 
 ############################################################################
 
@@ -57,7 +107,7 @@ def centering(Xdata, mean_centering = 'global'):
 ############################################################################
 
 # Function: Decomposition
-def decomposition(Xdata, mean_centering = 'global', k = 2, user_in_columns = True, graph = True, size_x = 15, size_y = 15):
+def decomposition(Xdata, mean_centering = 'global', k = 2, user_in_columns = True, graph = True, names = True, size_x = 15, size_y = 15):
     if (k < 1):
         k = 1
     if (k <= 1):
@@ -113,8 +163,9 @@ def decomposition(Xdata, mean_centering = 'global', k = 2, user_in_columns = Tru
         plt.ylabel('Feature 2', fontsize = 12)
         ax1.scatter(U[:,0], U[:,1], c = 'blue', s = 25, marker = 'o', alpha = 0.45)
         plt.title('Users')
-        for i, txt in enumerate(users):
-            ax1.annotate(txt, (U_n[:,0][i], U_n[:,1][i]))
+        if (names == True):
+            for i, txt in enumerate(users):
+                ax1.annotate(txt, (U_n[:,0][i], U_n[:,1][i]))
         ax1.set_xlim(min(U_n[:,0])*1.05, max(U_n[:,0])*1.05)
         ax1.set_ylim(min(U_n[:,1])*1.05, max(U_n[:,1])*1.05)
         ax2 = plt.subplot(gs[0,1])
@@ -130,8 +181,9 @@ def decomposition(Xdata, mean_centering = 'global', k = 2, user_in_columns = Tru
         V   = svd_V_transposed.T
         ax2.scatter(V[:,0], V[:,1], c = 'red', s = 25, marker = 'o', alpha = 0.45)
         plt.title('Items')
-        for i, txt in enumerate(items):
-            ax2.annotate(txt, (V_n[:,0][i], V_n[:,1][i]))
+        if (names == True):
+            for i, txt in enumerate(items):
+                ax2.annotate(txt, (V_n[:,0][i], V_n[:,1][i]))
         ax2.set_xlim(min(V_n[:,0])*1.05, max(V_n[:,0])*1.05)
         ax2.set_ylim(min(V_n[:,1])*1.05, max(V_n[:,1])*1.05)
         plt.show()
@@ -140,4 +192,3 @@ def decomposition(Xdata, mean_centering = 'global', k = 2, user_in_columns = Tru
     return pred.round(2), rmse, svd_U, svd_sigma, svd_V_transposed.T
 
 ############################################################################
-
