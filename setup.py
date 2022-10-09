@@ -6,7 +6,7 @@ long_description = (this_directory / 'README.md').read_text()
 
 setup(
     name='pyRecommenderSystem',
-    version='1.4.9',
+    version='1.5.0',
     license='GNU',
     author='Valdecy Pereira',
     author_email='valdecy.pereira@gmail.com',
@@ -16,7 +16,7 @@ setup(
     install_requires=[
         'numpy',
         'pandas',
-        'seaborn',
+        'plotly',
         'matplotlib',
         'sklearn'
     ],
