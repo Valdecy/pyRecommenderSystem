@@ -31,8 +31,14 @@ def duplicates_set(arr):
         uniques.add(str(arr[i,:]))
     return result
 
+# Function: Build Distance Matrix
+def build_distance_matrix(coordinates):
+   a = coordinates
+   b = a.reshape(np.prod(a.shape[:-1]), 1, a.shape[-1])
+   return np.sqrt(np.einsum('ijk,ijk->ij',  b - a,  b - a)).squeeze()
+
 # Function: Plot Users or Items
-def graph_interactive(data, U, V, view = 'browser', size = 10, user = True):
+def graph_interactive(data, U, V, view = 'browser', size = 10, user = True, name = ['B003ES5ZUU'], k = 5):
     if (view == 'browser' ):
         pio.renderers.default = 'browser'
     if (user == True):
@@ -43,8 +49,31 @@ def graph_interactive(data, U, V, view = 'browser', size = 10, user = True):
        P   = V
        n_L = data.index.to_list()
        col = 'rgba(255, 0, 0, 0.45)'
-    Xv = []
-    Yv = []
+    if (len(name) > 0):
+        idx = []
+        Xn  = []
+        Yn  = []
+        m_L = []
+        dm  = build_distance_matrix(P)
+        dm  = dm.astype(float)
+        np.fill_diagonal(dm, float('+inf'))
+        for n in name:
+            if (n in n_L):
+                idx.append(n_L.index(n))  
+        for i in idx:
+            Xn.append(P[i, 0]*1.00)
+            Yn.append(P[i, 1]*1.00)
+            m_L.append(n_L[i])
+            #rows = np.argsort(dm[i,:])[::-1]
+            rows = np.argsort(dm[i,:])
+            rows = rows[:k]
+            for j in range(0, rows.shape[0]):
+                Xn.append(P[rows[j], 0]*1.00)
+                Yn.append(P[rows[j], 1]*1.00)
+                m_L.append(n_L[rows[j]])
+    Xv    = []
+    Yv    = []
+    trace = []
     for i in range(0, P.shape[0]):
         Xv.append(P[i, 0]*1.00)
         Yv.append(P[i, 1]*1.00)
@@ -58,6 +87,19 @@ def graph_interactive(data, U, V, view = 'browser', size = 10, user = True):
                          hovertext = n_L,
                          name      = ''
                          )
+    trace.append(n_trace)
+    if (len(name) > 0):
+        m_trace = go.Scatter(x         = Xn,
+                             y         = Yn,
+                             opacity   = 1,
+                             mode      = 'markers',
+                             marker    = dict(symbol = 'circle-dot', size = size, color = 'rgba(0, 0, 0, 1)'),
+                             text      = m_L,
+                             hoverinfo = 'text',
+                             hovertext = m_L,
+                             name      = ''
+                             )
+        trace.append(m_trace)
     layout  = go.Layout(showlegend   = False,
                         hovermode    = 'closest',
                         margin       = dict(b = 10, l = 5, r = 5, t = 10),
@@ -75,7 +117,7 @@ def graph_interactive(data, U, V, view = 'browser', size = 10, user = True):
                                               tickmode       = 'array', 
                                             )
                         )
-    fig_aut = go.Figure(data = [n_trace], layout = layout)
+    fig_aut = go.Figure(data = trace, layout = layout)
     fig_aut.show() 
     return
 
