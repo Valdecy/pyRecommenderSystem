@@ -38,7 +38,7 @@ def build_distance_matrix(coordinates):
    return np.sqrt(np.einsum('ijk,ijk->ij',  b - a,  b - a)).squeeze()
 
 # Function: Plot Users or Items
-def graph_interactive(data, U, V, view = 'browser', size = 10, user = True, name = ['B003ES5ZUU'], k = 5):
+def graph_interactive(data, U, V, view = 'browser', size = 10, user = True, name = [], k = 5):
     if (view == 'browser' ):
         pio.renderers.default = 'browser'
     if (user == True):
@@ -64,13 +64,13 @@ def graph_interactive(data, U, V, view = 'browser', size = 10, user = True, name
             Xn.append(P[i, 0]*1.00)
             Yn.append(P[i, 1]*1.00)
             m_L.append(n_L[i])
-            #rows = np.argsort(dm[i,:])[::-1]
             rows = np.argsort(dm[i,:])
             rows = rows[:k]
             for j in range(0, rows.shape[0]):
                 Xn.append(P[rows[j], 0]*1.00)
                 Yn.append(P[rows[j], 1]*1.00)
                 m_L.append(n_L[rows[j]])
+        print(m_L)
     Xv    = []
     Yv    = []
     trace = []
